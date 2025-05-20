@@ -12,8 +12,8 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
   return (
     <div className={`flex gap-4 ${isAI ? 'border-l-4 border-blue-400' : ''}`}>
       {isAI && (
-        <div className="flex-shrink-0 w-8 h-8 mt-1">
-          <div className="relative w-8 h-8">
+        <div className="flex-shrink-0 w-6 h-6 mt-1">
+          <div className="relative w-6 h-6">
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#0051AF] via-[#0087EA] to-[#00BCEB]"></div>
             <div className="absolute top-[10%] right-[10%] w-1/2 h-1/2 rounded-tl-full bg-gradient-to-br from-[#0087EA] to-[#63FFF7]"></div>
           </div>
