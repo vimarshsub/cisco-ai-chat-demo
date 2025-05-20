@@ -19,7 +19,7 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
           </div>
         </div>
       )}
-      <div className={`flex flex-col flex-grow ${isAI ? 'pl-2' : 'pl-10'}`}>
+      <div className={`flex flex-col flex-grow ${isAI ? 'pl-4' : 'pl-10'}`}>
         <div className="flex items-center gap-2">
           <span className="font-semibold text-sm">{isAI ? 'AI Assistant' : 'You'}</span>
           <span className="text-xs text-gray-500">{message.timestamp}</span>
