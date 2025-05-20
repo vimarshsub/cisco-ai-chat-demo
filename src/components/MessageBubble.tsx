@@ -10,9 +10,9 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
   const isAI = message.sender === 'ai';
   
   return (
-    <div className={`flex gap-4 ${isAI ? 'border-l-4 border-blue-400' : ''}`}>
+    <div className={`flex gap-4 ${isAI ? 'border-l-4 border-blue-400 bg-gray-50 rounded-md p-4' : ''}`}>
       {isAI && (
-        <div className="flex-shrink-0 w-6 h-6 mt-1 pl-2">
+        <div className="flex-shrink-0 w-6 h-6 mt-1">
           <div className="relative w-6 h-6">
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#0051AF] via-[#0087EA] to-[#00BCEB]"></div>
             <div className="absolute top-[10%] right-[10%] w-1/2 h-1/2 rounded-tl-full bg-gradient-to-br from-[#0087EA] to-[#63FFF7]"></div>
@@ -24,7 +24,7 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
           <span className="font-semibold text-sm">{isAI ? 'AI Assistant' : 'You'}</span>
           <span className="text-xs text-gray-500">{message.timestamp}</span>
         </div>
-        <div className="mt-1 text-sm">{message.content}</div>
+        <div className={`mt-1 text-sm ${isAI ? 'text-gray-800' : ''}`}>{message.content}</div>
       </div>
     </div>
   );
