@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from "@/hooks/use-toast";
 import Header from '@/components/Header';
@@ -8,6 +8,7 @@ import ConversationView from '@/components/ConversationView';
 import ChatInput from '@/components/ChatInput';
 import SuggestionGrid from '@/components/SuggestionGrid';
 import { mockThreads, suggestionPrompts, Thread, Message } from '@/data/mockData';
+import cannedData from '@/data/cannedData.json';
 
 const Index = () => {
   const [threads, setThreads] = useState(mockThreads);
@@ -39,6 +40,33 @@ const Index = () => {
     });
   };
 
+  const findMatchingCannedResponse = (content: string) => {
+    // Check if the input exactly matches any common question
+    const matchingQuestion = cannedData.commonQuestions.find(q => 
+      q.question.toLowerCase() === content.toLowerCase().trim()
+    );
+    
+    if (matchingQuestion) {
+      // Find a related response based on tags
+      const responseIndex = matchingQuestion.tags.findIndex(tag => 
+        cannedData.assistantResponses.some(r => r.title.toLowerCase().includes(tag))
+      );
+      
+      if (responseIndex !== -1) {
+        const tag = matchingQuestion.tags[responseIndex];
+        const relatedResponse = cannedData.assistantResponses.find(r => 
+          r.title.toLowerCase().includes(tag.toLowerCase())
+        );
+        
+        if (relatedResponse) {
+          return relatedResponse.content;
+        }
+      }
+    }
+    
+    return null;
+  };
+
   const handleSendMessage = (content: string) => {
     if (!activeThreadId) return;
     
@@ -63,11 +91,14 @@ const Index = () => {
       )
     );
     
+    // Check if there's a matching canned response
+    const cannedResponse = findMatchingCannedResponse(content);
+    
     // Simulate AI response after short delay
     setTimeout(() => {
       const aiResponse: Message = {
         id: `msg-${uuidv4()}`,
-        content: `This is a simulated response to your question: "${content}"`,
+        content: cannedResponse || `This is a simulated response to your question: "${content}"`,
         sender: "ai",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
