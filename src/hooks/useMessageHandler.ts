@@ -145,11 +145,32 @@ export const useMessageHandler = ({
       return;
     }
     
-    // Otherwise, proceed with regular response flow
+    // Otherwise, proceed with regular response flow with delay
+    // Show typing indicator first
+    const typingIndicatorId = `typing-${uuidv4()}`;
+    const typingIndicator: Message = {
+      id: typingIndicatorId,
+      content: "",
+      sender: "ai",
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      isTyping: true
+    };
+    
+    setThreads(prevThreads => 
+      prevThreads.map(thread => 
+        thread.id === activeThreadId
+          ? { ...thread, messages: [...thread.messages, typingIndicator] }
+          : thread
+      )
+    );
+    
+    // Calculate response time based on content length (between 1-3 seconds)
+    const responseTime = Math.min(Math.max(content.length * 50, 1000), 3000);
+    
     // Check if there's a direct response or matching canned response
     const directResponse = getDirectResponse(content);
     
-    // Simulate AI response after short delay
+    // Remove typing indicator and add real response after delay
     setTimeout(() => {
       const aiResponse: Message = {
         id: `msg-${uuidv4()}`,
@@ -161,11 +182,16 @@ export const useMessageHandler = ({
       setThreads(prevThreads => 
         prevThreads.map(thread => 
           thread.id === activeThreadId
-            ? { ...thread, messages: [...thread.messages, aiResponse] }
+            ? { 
+                ...thread, 
+                messages: thread.messages
+                  .filter(msg => msg.id !== typingIndicatorId)
+                  .concat(aiResponse)
+              }
             : thread
         )
       );
-    }, 1000);
+    }, responseTime);
   };
 
   const handleSelectSuggestion = (suggestion: string, createThread = true) => {

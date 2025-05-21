@@ -11,6 +11,7 @@ interface MessageBubbleProps {
 const MessageBubble = ({ message }: MessageBubbleProps) => {
   const isAI = message.sender === 'ai';
   const scenarioStep = message.scenarioStep as ScenarioStepType | undefined;
+  const isTyping = message.isTyping;
   
   return (
     <div className={`flex gap-4 ${isAI ? 'border-l-4 border-blue-400 bg-gray-50 rounded-md p-4' : ''}`}>
@@ -28,7 +29,13 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
           <span className="text-xs text-gray-500">{message.timestamp}</span>
         </div>
         <div className={`mt-1 text-sm ${isAI ? 'text-gray-800' : ''}`}>
-          {scenarioStep ? (
+          {isTyping ? (
+            <div className="flex items-center space-x-1">
+              <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></div>
+              <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse delay-150"></div>
+              <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse delay-300"></div>
+            </div>
+          ) : scenarioStep ? (
             <ScenarioStep step={scenarioStep} />
           ) : (
             message.content

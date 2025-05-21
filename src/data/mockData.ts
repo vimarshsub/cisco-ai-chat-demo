@@ -17,6 +17,7 @@ export interface Message {
   sender: "user" | "ai";
   timestamp: string;
   scenarioStep?: ScenarioStep;
+  isTyping?: boolean;
 }
 
 // Mock data for the chat assistant
