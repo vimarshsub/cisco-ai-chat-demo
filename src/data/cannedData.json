@@ -25,6 +25,11 @@
       "id": "resp-5",
       "title": "VPN Setup",
       "content": "To set up a VPN for your network: 1) Choose a reliable VPN provider 2) Install the VPN client on your router or devices 3) Select an appropriate server location 4) Configure split tunneling if needed 5) Test your connection to verify encryption is working properly"
+    },
+    {
+      "id": "resp-6",
+      "title": "VLAN Configuration",
+      "content": "The 'Add VLAN' workflow configures a new VLAN across all networks in designated organizations.\n\nHere's an overview of the required inputs and key steps:\n\n**Inputs:**\n- Organizations: Select organizations\n- VLAN ID: 1-4094\n- VLAN Name: Text field\n- Security: Open, WPA2, or splash screen\n\n**Steps:**\n1) Get organization networks\n2) Get network devices\n3) Configure VLAN on upstream switch ports\n4) Add VLAN\n5) Configure VLAN settings\n6) Document results\n\nTo set up VLANs, navigate to the Network settings and select VLAN configuration. From there you can create new VLANs, assign IP ranges, and manage VLAN tagging for your network devices."
     }
   ],
   "commonQuestions": [
@@ -52,6 +57,11 @@
       "id": "q-5",
       "question": "How do I protect my IoT devices?",
       "tags": ["security", "iot", "protection"]
+    },
+    {
+      "id": "q-6",
+      "question": "How do I set up and manage VLANs?",
+      "tags": ["vlan", "configuration", "network"]
     }
   ],
   "networkTopics": [
@@ -64,6 +74,7 @@
     "Guest Networks",
     "VPN Setup",
     "Mesh Networks",
-    "Network Monitoring"
+    "Network Monitoring",
+    "VLAN Configuration"
   ]
 }

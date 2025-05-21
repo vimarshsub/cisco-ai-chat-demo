@@ -40,33 +40,55 @@ const Index = () => {
     });
   };
 
+  // Direct responses for specific questions
+  const getDirectResponse = (content: string) => {
+    const normalizedInput = content.toLowerCase().trim();
+    
+    // Check for direct matches with hardcoded responses first
+    if (normalizedInput === "how do i set up and manage vlans?" || 
+        normalizedInput.includes("set up vlan") || 
+        normalizedInput.includes("manage vlan")) {
+      return `The 'Add VLAN' workflow configures a new VLAN across all networks in designated organizations.
+
+Here's an overview of the required inputs and key steps:
+
+**Inputs:**
+- Organizations: Select organizations
+- VLAN ID: 1-4094
+- VLAN Name: Text field
+- Security: Open, WPA2, or splash screen
+
+**Steps:**
+1) Get organization networks
+2) Get network devices
+3) Configure VLAN on upstream switch ports
+4) Add VLAN
+5) Configure VLAN settings
+6) Document results
+
+To set up VLANs, navigate to the Network settings and select VLAN configuration. From there you can create new VLANs, assign IP ranges, and manage VLAN tagging for your network devices.`;
+    }
+
+    // Then try to find a canned response from the database
+    return findMatchingCannedResponse(content);
+  };
+
   const findMatchingCannedResponse = (content: string) => {
     // Convert input to lowercase for case-insensitive comparison
     const normalizedInput = content.toLowerCase().trim();
-    
-    console.log("Searching for response to:", normalizedInput);
     
     // Simple direct matching for exact questions (case insensitive)
     for (const questionObj of cannedData.commonQuestions) {
       const normalizedQuestion = questionObj.question.toLowerCase().trim();
       
-      console.log(`Comparing input "${normalizedInput}" with question "${normalizedQuestion}"`);
-      
-      if (normalizedInput === normalizedQuestion) {
-        console.log("MATCH FOUND with question:", questionObj.question);
-        
+      if (normalizedInput === normalizedQuestion) {        
         // Once we found a matching question, search through all responses
         // to find one with a title containing any of the tags
         for (const tag of questionObj.tags) {
-          console.log("Checking for responses with tag:", tag);
-          
           for (const response of cannedData.assistantResponses) {
             const responseTitle = response.title.toLowerCase();
             
-            console.log(`Does response title "${responseTitle}" contain tag "${tag.toLowerCase()}"?`);
-            
             if (responseTitle.includes(tag.toLowerCase())) {
-              console.log("MATCH FOUND! Response:", response.title);
               return response.content;
             }
           }
@@ -74,7 +96,6 @@ const Index = () => {
       }
     }
     
-    console.log("No matching response found");
     return null;
   };
 
@@ -102,15 +123,14 @@ const Index = () => {
       )
     );
     
-    // Check if there's a matching canned response
-    const cannedResponse = findMatchingCannedResponse(content);
-    console.log("Canned response found:", cannedResponse ? "YES" : "NO");
+    // Check if there's a direct response or matching canned response
+    const directResponse = getDirectResponse(content);
     
     // Simulate AI response after short delay
     setTimeout(() => {
       const aiResponse: Message = {
         id: `msg-${uuidv4()}`,
-        content: cannedResponse || `This is a simulated response to your question: "${content}"`,
+        content: directResponse || `This is a simulated response to your question: "${content}"`,
         sender: "ai",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
