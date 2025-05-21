@@ -1,6 +1,8 @@
 
 import React from 'react';
 import { Message } from '../data/mockData';
+import ScenarioStep from './scenario/ScenarioStep';
+import { ScenarioStep as ScenarioStepType } from '@/types/multiStepScenario';
 
 interface MessageBubbleProps {
   message: Message;
@@ -8,6 +10,7 @@ interface MessageBubbleProps {
 
 const MessageBubble = ({ message }: MessageBubbleProps) => {
   const isAI = message.sender === 'ai';
+  const scenarioStep = message.scenarioStep as ScenarioStepType | undefined;
   
   return (
     <div className={`flex gap-4 ${isAI ? 'border-l-4 border-blue-400 bg-gray-50 rounded-md p-4' : ''}`}>
@@ -24,7 +27,13 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
           <span className="font-semibold text-sm">{isAI ? 'AI Assistant' : 'You'}</span>
           <span className="text-xs text-gray-500">{message.timestamp}</span>
         </div>
-        <div className={`mt-1 text-sm ${isAI ? 'text-gray-800' : ''}`}>{message.content}</div>
+        <div className={`mt-1 text-sm ${isAI ? 'text-gray-800' : ''}`}>
+          {scenarioStep ? (
+            <ScenarioStep step={scenarioStep} />
+          ) : (
+            message.content
+          )}
+        </div>
       </div>
     </div>
   );

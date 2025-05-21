@@ -1,9 +1,10 @@
-
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from "@/hooks/use-toast";
 import { Thread, Message } from '@/data/mockData';
 import { getDirectResponse } from '@/utils/responseUtils';
+import { scenarios } from '@/data/scenarios';
+import { ScenarioStep } from '@/types/multiStepScenario';
 
 interface UseMessageHandlerProps {
   threads: Thread[];
@@ -30,6 +31,85 @@ export const useMessageHandler = ({
     return newThreadId;
   };
 
+  const findMatchingScenario = (content: string) => {
+    const normalizedContent = content.toLowerCase().trim();
+    
+    for (const scenario of scenarios) {
+      for (const phrase of scenario.triggerPhrases) {
+        if (normalizedContent === phrase.toLowerCase().trim()) {
+          return scenario;
+        }
+      }
+    }
+    
+    return null;
+  };
+
+  const processScenarioStep = (threadId: string, scenarioId: string, stepIndex: number) => {
+    const scenario = scenarios.find(s => s.id === scenarioId);
+    if (!scenario || stepIndex >= scenario.steps.length) return;
+    
+    const step = scenario.steps[stepIndex];
+    
+    // Create AI message with scenario step
+    const aiMessage: Message = {
+      id: `msg-${uuidv4()}`,
+      content: '',
+      sender: "ai",
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      scenarioStep: step
+    };
+    
+    // Update thread with AI message
+    setThreads(prevThreads => 
+      prevThreads.map(thread => 
+        thread.id === threadId
+          ? { 
+              ...thread, 
+              messages: [...thread.messages, aiMessage],
+              activeScenario: {
+                id: scenarioId,
+                currentStepIndex: stepIndex
+              }
+            }
+          : thread
+      )
+    );
+    
+    // Process next step if there's no wait for user input and if there's a next step
+    if (!step.waitForUserInput && stepIndex + 1 < scenario.steps.length) {
+      const delay = step.delay || 1000;
+      setTimeout(() => {
+        processScenarioStep(threadId, scenarioId, stepIndex + 1);
+      }, delay);
+    }
+  };
+
+  const handleUserScenarioInput = (threadId: string, content: string) => {
+    const thread = threads.find(t => t.id === threadId);
+    if (!thread?.activeScenario) return false;
+    
+    const { id: scenarioId, currentStepIndex } = thread.activeScenario;
+    const scenario = scenarios.find(s => s.id === scenarioId);
+    if (!scenario) return false;
+    
+    const currentStep = scenario.steps[currentStepIndex];
+    if (!currentStep.waitForUserInput || !currentStep.expectedUserInput) return false;
+    
+    const normalizedContent = content.toLowerCase().trim();
+    const isExpectedInput = currentStep.expectedUserInput.some(
+      input => normalizedContent.includes(input.toLowerCase().trim())
+    );
+    
+    if (isExpectedInput) {
+      // Process the next step in the scenario
+      processScenarioStep(threadId, scenarioId, currentStepIndex + 1);
+      return true;
+    }
+    
+    return false;
+  };
+
   const handleSendMessage = (content: string) => {
     if (!activeThreadId) return;
     
@@ -54,6 +134,18 @@ export const useMessageHandler = ({
       )
     );
     
+    // Check if this is a response to an active scenario
+    const isScenarioResponse = handleUserScenarioInput(activeThreadId, content);
+    if (isScenarioResponse) return;
+    
+    // Check if this is a trigger for a new scenario
+    const matchingScenario = findMatchingScenario(content);
+    if (matchingScenario) {
+      processScenarioStep(activeThreadId, matchingScenario.id, 0);
+      return;
+    }
+    
+    // Otherwise, proceed with regular response flow
     // Check if there's a direct response or matching canned response
     const directResponse = getDirectResponse(content);
     

@@ -1,8 +1,29 @@
 
 import cannedData from '@/data/cannedData.json';
+import { scenarios } from '@/data/scenarios';
+
+// Check if content matches any scenario trigger phrases
+export const isScenarioTrigger = (content: string): boolean => {
+  const normalizedInput = content.toLowerCase().trim();
+  
+  for (const scenario of scenarios) {
+    for (const phrase of scenario.triggerPhrases) {
+      if (normalizedInput === phrase.toLowerCase().trim()) {
+        return true;
+      }
+    }
+  }
+  
+  return false;
+};
 
 // Get direct response for specific questions
 export const getDirectResponse = (content: string): string | null => {
+  // Skip if this is a scenario trigger
+  if (isScenarioTrigger(content)) {
+    return null;
+  }
+
   const normalizedInput = content.toLowerCase().trim();
   
   // Check for VLAN related queries

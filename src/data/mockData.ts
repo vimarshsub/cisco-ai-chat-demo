@@ -1,9 +1,14 @@
+import { ScenarioStep } from '@/types/multiStepScenario';
 
 export interface Thread {
   id: string;
   name: string;
   date: string;
   messages: Message[];
+  activeScenario?: {
+    id: string;
+    currentStepIndex: number;
+  };
 }
 
 export interface Message {
@@ -11,6 +16,7 @@ export interface Message {
   content: string;
   sender: "user" | "ai";
   timestamp: string;
+  scenarioStep?: ScenarioStep;
 }
 
 // Mock data for the chat assistant
