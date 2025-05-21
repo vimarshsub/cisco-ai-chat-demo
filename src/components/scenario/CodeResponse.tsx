@@ -10,8 +10,8 @@ interface CodeResponseProps {
 const CodeResponse: React.FC<CodeResponseProps> = ({ data }) => {
   return (
     <div className="my-4">
-      <ScrollArea className="max-h-[400px]">
-        <div className="p-4 bg-gray-900 text-gray-100 rounded-md font-mono text-sm whitespace-pre-wrap overflow-x-auto">
+      <ScrollArea className="max-h-[400px] border rounded-md">
+        <div className="p-4 bg-gray-900 text-gray-100 font-mono text-sm whitespace-pre-wrap overflow-x-auto">
           {data.code}
         </div>
       </ScrollArea>
