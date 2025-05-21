@@ -1,0 +1,69 @@
+
+{
+  "assistantResponses": [
+    {
+      "id": "resp-1",
+      "title": "Network Security",
+      "content": "To secure your network, I recommend: 1) Enable WPA3 encryption for your WiFi 2) Set up a guest network for visitors 3) Update firmware on all network devices 4) Implement MAC address filtering 5) Use a strong, unique password"
+    },
+    {
+      "id": "resp-2",
+      "title": "Speed Optimization",
+      "content": "Here are some ways to optimize your network speed: 1) Position your router in a central location 2) Use a wired connection for stationary devices 3) Update router firmware 4) Set up Quality of Service (QoS) rules 5) Consider upgrading to WiFi 6 if your devices support it"
+    },
+    {
+      "id": "resp-3",
+      "title": "Device Troubleshooting",
+      "content": "To troubleshoot connection issues: 1) Restart the problematic device 2) Restart your router and modem 3) Check if other devices are affected 4) Verify you're connected to the correct network 5) Try forgetting the network and reconnecting 6) Update device drivers or firmware if available"
+    },
+    {
+      "id": "resp-4",
+      "title": "Network Monitoring",
+      "content": "For effective network monitoring: 1) Enable logging on your router 2) Set up bandwidth monitoring tools 3) Check connected devices regularly 4) Monitor for unusual traffic patterns 5) Configure alerts for network events 6) Review logs periodically for security issues"
+    },
+    {
+      "id": "resp-5",
+      "title": "VPN Setup",
+      "content": "To set up a VPN for your network: 1) Choose a reliable VPN provider 2) Install the VPN client on your router or devices 3) Select an appropriate server location 4) Configure split tunneling if needed 5) Test your connection to verify encryption is working properly"
+    }
+  ],
+  "commonQuestions": [
+    {
+      "id": "q-1",
+      "question": "How do I reset my router to factory settings?",
+      "tags": ["router", "reset", "configuration"]
+    },
+    {
+      "id": "q-2",
+      "question": "What's the difference between 2.4GHz and 5GHz WiFi?",
+      "tags": ["wifi", "frequency", "comparison"]
+    },
+    {
+      "id": "q-3",
+      "question": "How can I extend my WiFi coverage?",
+      "tags": ["wifi", "range", "coverage"]
+    },
+    {
+      "id": "q-4",
+      "question": "What does MAC filtering do?",
+      "tags": ["security", "filtering", "devices"]
+    },
+    {
+      "id": "q-5",
+      "question": "How do I protect my IoT devices?",
+      "tags": ["security", "iot", "protection"]
+    }
+  ],
+  "networkTopics": [
+    "WiFi Security",
+    "Router Configuration",
+    "Network Performance",
+    "Troubleshooting",
+    "Smart Home Networking",
+    "Parental Controls",
+    "Guest Networks",
+    "VPN Setup",
+    "Mesh Networks",
+    "Network Monitoring"
+  ]
+}
