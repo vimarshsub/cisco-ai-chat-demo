@@ -29,7 +29,7 @@
     {
       "id": "resp-6",
       "title": "VLAN Configuration",
-      "content": "The 'Add VLAN' workflow configures a new VLAN across all networks in designated organizations.\n\nHere's an overview of the required inputs and key steps:\n\n**Inputs:**\n- Organizations: Select organizations\n- VLAN ID: 1-4094\n- VLAN Name: Text field\n- Security: Open, WPA2, or splash screen\n\n**Steps:**\n1) Get organization networks\n2) Get network devices\n3) Configure VLAN on upstream switch ports\n4) Add VLAN\n5) Configure VLAN settings\n6) Document results\n\nTo set up VLANs, navigate to the Network settings and select VLAN configuration. From there you can create new VLANs, assign IP ranges, and manage VLAN tagging for your network devices."
+      "content": "The 'Add VLAN' workflow configures a new VLAN across all networks in designated organizations.\n\nHere's an overview of the required inputs and key steps:\n\n**Inputs:**\nOrganizations: Select organizations\nVLAN ID: 1-4094\nVLAN Name: Text field\nSecurity: Open, WPA2, or splash screen\n\n**Steps:**\n1) Get organization networks\n2) Get network devices\n3) Configure VLAN on upstream switch ports\n4) Add VLAN\n5) Configure VLAN settings\n6) Document results\n   • If executed: Add ticket\n   • If failed: Create incident\n\nTo set up VLANs, navigate to the Network settings and select VLAN configuration."
     }
   ],
   "commonQuestions": [

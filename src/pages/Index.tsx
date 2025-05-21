@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from "@/hooks/use-toast";
@@ -44,29 +43,20 @@ const Index = () => {
   const getDirectResponse = (content: string) => {
     const normalizedInput = content.toLowerCase().trim();
     
-    // Check for direct matches with hardcoded responses first
+    // Check for VLAN related queries
     if (normalizedInput === "how do i set up and manage vlans?" || 
         normalizedInput.includes("set up vlan") || 
-        normalizedInput.includes("manage vlan")) {
-      return `The 'Add VLAN' workflow configures a new VLAN across all networks in designated organizations.
-
-Here's an overview of the required inputs and key steps:
-
-**Inputs:**
-- Organizations: Select organizations
-- VLAN ID: 1-4094
-- VLAN Name: Text field
-- Security: Open, WPA2, or splash screen
-
-**Steps:**
-1) Get organization networks
-2) Get network devices
-3) Configure VLAN on upstream switch ports
-4) Add VLAN
-5) Configure VLAN settings
-6) Document results
-
-To set up VLANs, navigate to the Network settings and select VLAN configuration. From there you can create new VLANs, assign IP ranges, and manage VLAN tagging for your network devices.`;
+        normalizedInput.includes("manage vlan") ||
+        normalizedInput.includes("vlan configuration")) {
+      
+      // Find the VLAN Configuration response
+      const vlanResponse = cannedData.assistantResponses.find(resp => 
+        resp.title === "VLAN Configuration"
+      );
+      
+      if (vlanResponse) {
+        return vlanResponse.content;
+      }
     }
 
     // Then try to find a canned response from the database
