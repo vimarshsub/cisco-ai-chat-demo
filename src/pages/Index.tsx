@@ -41,37 +41,56 @@ const Index = () => {
   };
 
   const findMatchingCannedResponse = (content: string) => {
-    console.log("Finding response for:", content);
+    console.log("Finding response for input:", content);
     
-    // Debug the common questions in canned data
-    console.log("Available questions:", cannedData.commonQuestions.map(q => q.question));
+    // Log all available questions for debugging
+    console.log("Available questions in canned data:", 
+      JSON.stringify(cannedData.commonQuestions.map(q => q.question)));
     
-    // Check if the input matches any common question (case-insensitive and trimmed)
+    // Normalize the user input for comparison
+    const normalizedInput = content.toLowerCase().trim();
+    
+    console.log("Normalized input:", normalizedInput);
+    
+    // Log all normalized questions for debugging
+    console.log("Normalized questions:", 
+      JSON.stringify(cannedData.commonQuestions.map(q => q.question.toLowerCase().trim())));
+    
+    // Find a matching question - compare normalized strings
     const matchingQuestion = cannedData.commonQuestions.find(q => 
-      q.question.toLowerCase().trim() === content.toLowerCase().trim()
+      q.question.toLowerCase().trim() === normalizedInput
     );
     
     console.log("Matching question found:", matchingQuestion);
     
     if (matchingQuestion) {
-      // Debug the available tags
       console.log("Question tags:", matchingQuestion.tags);
-      console.log("Available responses:", cannedData.assistantResponses.map(r => r.title));
       
-      // Search for a response that matches any tag from the question
+      // Try to find a response with a matching tag
       for (const tag of matchingQuestion.tags) {
-        const relatedResponse = cannedData.assistantResponses.find(r => 
-          r.title.toLowerCase().includes(tag.toLowerCase())
-        );
+        console.log("Checking tag:", tag);
         
-        if (relatedResponse) {
-          console.log("Found matching response:", relatedResponse.title);
-          return relatedResponse.content;
+        // Log all response titles for debugging
+        console.log("Response titles:", 
+          JSON.stringify(cannedData.assistantResponses.map(r => r.title)));
+        
+        const matchingResponse = cannedData.assistantResponses.find(r => {
+          const titleContainsTag = r.title.toLowerCase().includes(tag.toLowerCase());
+          console.log(`Does "${r.title.toLowerCase()}" include "${tag.toLowerCase()}"?`, titleContainsTag);
+          return titleContainsTag;
+        });
+        
+        if (matchingResponse) {
+          console.log("Found matching response with title:", matchingResponse.title);
+          return matchingResponse.content;
         }
       }
+      
+      console.log("No matching response found for the tags");
+    } else {
+      console.log("No matching question found in the canned data");
     }
     
-    console.log("No matching response found");
     return null;
   };
 
@@ -101,7 +120,7 @@ const Index = () => {
     
     // Check if there's a matching canned response
     const cannedResponse = findMatchingCannedResponse(content);
-    console.log("Canned response:", cannedResponse);
+    console.log("Canned response result:", cannedResponse);
     
     // Simulate AI response after short delay
     setTimeout(() => {
