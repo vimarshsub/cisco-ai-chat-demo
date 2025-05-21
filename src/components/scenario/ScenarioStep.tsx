@@ -14,9 +14,11 @@ const ScenarioStep: React.FC<ScenarioStepProps> = ({ step }) => {
   const renderResponseContent = () => {
     switch (step.responseType) {
       case 'table':
-        return step.responseData ? <TableResponse data={step.responseData} /> : null;
+        return step.responseData && 'headers' in step.responseData ? 
+          <TableResponse data={step.responseData} /> : null;
       case 'code':
-        return step.responseData ? <CodeResponse data={step.responseData} /> : null;
+        return step.responseData && 'code' in step.responseData ? 
+          <CodeResponse data={step.responseData} /> : null;
       case 'planning':
         return <PlanningResponse />;
       case 'loading':

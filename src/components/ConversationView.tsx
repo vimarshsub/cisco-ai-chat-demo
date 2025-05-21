@@ -2,6 +2,7 @@
 import React from 'react';
 import { Message, Thread } from '../data/mockData';
 import MessageBubble from './MessageBubble';
+import { ScrollArea } from './ui/scroll-area';
 
 interface ConversationViewProps {
   thread: Thread | null;
@@ -29,11 +30,13 @@ const ConversationView = ({ thread }: ConversationViewProps) => {
       <div className="p-4 border-b flex items-center justify-between">
         <h2 className="font-bold text-lg text-gray-800">{thread.name}</h2>
       </div>
-      <div className="flex-1 overflow-y-auto p-4 space-y-6">
-        {thread.messages.map((message) => (
-          <MessageBubble key={message.id} message={message} />
-        ))}
-      </div>
+      <ScrollArea className="flex-1 p-4">
+        <div className="space-y-6">
+          {thread.messages.map((message) => (
+            <MessageBubble key={message.id} message={message} />
+          ))}
+        </div>
+      </ScrollArea>
     </div>
   );
 };
