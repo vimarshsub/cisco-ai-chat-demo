@@ -41,29 +41,37 @@ const Index = () => {
   };
 
   const findMatchingCannedResponse = (content: string) => {
-    // Check if the input exactly matches any common question
+    console.log("Finding response for:", content);
+    
+    // Debug the common questions in canned data
+    console.log("Available questions:", cannedData.commonQuestions.map(q => q.question));
+    
+    // Check if the input matches any common question (case-insensitive and trimmed)
     const matchingQuestion = cannedData.commonQuestions.find(q => 
-      q.question.toLowerCase() === content.toLowerCase().trim()
+      q.question.toLowerCase().trim() === content.toLowerCase().trim()
     );
     
+    console.log("Matching question found:", matchingQuestion);
+    
     if (matchingQuestion) {
-      // Find a related response based on tags
-      const responseIndex = matchingQuestion.tags.findIndex(tag => 
-        cannedData.assistantResponses.some(r => r.title.toLowerCase().includes(tag))
-      );
+      // Debug the available tags
+      console.log("Question tags:", matchingQuestion.tags);
+      console.log("Available responses:", cannedData.assistantResponses.map(r => r.title));
       
-      if (responseIndex !== -1) {
-        const tag = matchingQuestion.tags[responseIndex];
+      // Search for a response that matches any tag from the question
+      for (const tag of matchingQuestion.tags) {
         const relatedResponse = cannedData.assistantResponses.find(r => 
           r.title.toLowerCase().includes(tag.toLowerCase())
         );
         
         if (relatedResponse) {
+          console.log("Found matching response:", relatedResponse.title);
           return relatedResponse.content;
         }
       }
     }
     
+    console.log("No matching response found");
     return null;
   };
 
@@ -93,6 +101,7 @@ const Index = () => {
     
     // Check if there's a matching canned response
     const cannedResponse = findMatchingCannedResponse(content);
+    console.log("Canned response:", cannedResponse);
     
     // Simulate AI response after short delay
     setTimeout(() => {
